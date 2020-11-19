@@ -11,8 +11,12 @@ var Render = new THREE.WebGLRenderer();
 //El escenario
 var Escenario = new THREE.Scene();
 
+var angulo = 45;
+var aspecto = ancho/alto;
+var cerca = 0.1;
+var lejos = 10000
 //La cámara
-var Camara = new THREE.PerspectiveCamera();
+var Camara = new THREE.PerspectiveCamera(angulo, aspecto, cerca, lejos);
 
 //La figura
 var Figura;
@@ -39,7 +43,7 @@ function inicio() {
 
 
     //Acercar la camara a la posición en z
-    Camara.position.z = 100;
+    Camara.position.z = 15000;
     //Agregar la camara al escenario
     Escenario.add(Camara)
 

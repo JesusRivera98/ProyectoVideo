@@ -21,7 +21,7 @@ var Figura;
 var ElVector
 
 //Cotroles
-//var controls
+var controls
 
 /******************************** funciones **************************************/
 inicio();
@@ -48,7 +48,7 @@ function inicio() {
 
     //Agregar el escenario y la cámara al render
     //Render.render(Escenario, Camara)
-    //controls = new THREE.OrbitControls(Camara, Render.domElement);
+    controls = new THREE.OrbitControls(Camara, Render.domElement);
 }
 
 function cargar_modelo() {
@@ -88,12 +88,12 @@ function cargar_modelo() {
     }
 
     //agregando al escenario el punto o particula
-    ParticulaMaterial = new THREE.PointsMaterial({ color: 0xFF0000 });
+    ParticulaMaterial = new THREE.ParticleBasicMaterial({ color: 0xFF0000 });
     Particula = new THREE.ParticleSystem(Geometria, ParticulaMaterial);
     Escenario.add(Particula)
 
     //Agregando al escenario la figura
-    Material = new THREE.PointsMaterial({ color: 0xFF0000 });
+    Material = new THREE.ParticleBasicMaterial({ color: 0xFF0000 });
     Figura = new THREE.Line(GeometriaLinea, Material);
     Escenario.add(Figura)
 }
@@ -104,7 +104,7 @@ function animacion() {
 }
 
 function render_modelo() {
-    //controls.update();
+    controls.update();
     Figura.rotation.y += 0.01;
     //Agregar el escenario y la cámara al render
     Render.render(Escenario, Camara)

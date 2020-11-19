@@ -43,7 +43,7 @@ function inicio() {
 
 
     //Acercar la camara a la posición en z
-    Camara.position.z = 1500;
+    Camara.position.z = 150;
     //Agregar la camara al escenario
     Escenario.add(Camara)
 

@@ -2,8 +2,8 @@
 
 /********************* variables ******************************/
 //Tamaño de pantalla
-WIDTH = window.innerWidth; // Ancho de pantalla
-HEIGHT = window.innerHeight; // Alto de pantalla
+var ancho = window.innerWidth; // Ancho de pantalla
+var alto = window.innerHeight; // Alto de pantalla
 
 //Preparamos el render
 var Render = new THREE.WebGLRenderer();
@@ -31,7 +31,7 @@ function inicio() {
 
     //Tamaño del render
     //Render.setSize(800, 600);
-    Render.setSize(WIDTH, HEIGHT);
+    Render.setSize(ancho, alto);
     //Agregar el render al html
     document.getElementById('render').appendChild(Render.domElement);
 
@@ -42,6 +42,9 @@ function inicio() {
     Camara.position.z = 100;
     //Agregar la camara al escenario
     Escenario.add(Camara)
+
+    //Territorio
+    crear_plano();
 
     //Cargar nuevos modelos
     cargar_modelo();
@@ -96,6 +99,22 @@ function cargar_modelo() {
     Material = new THREE.ParticleBasicMaterial({ color: 0xFF0000 });
     Figura = new THREE.Line(GeometriaLinea, Material);
     Escenario.add(Figura)
+}
+
+function crear_plano(){
+    //Geometria del plano
+    Geometria_plano = new THREE.PlaneGeometry(1000,1000,10,10);
+    //Textura
+    Textura_plano = new THREE.ImageUtils.loadTexture("Texturas/cesped.jpg");
+    Textura_plano.wrapS = Textura_plano.wrapT = THREE.RepeatWrapping;
+    Textura_plano.repeat.set(10,10);
+    //Textura_plano.crossOrigin = ""
+
+    //Materil y agregado la textura
+    Material_plano = new THREE.MeshBasicMaterial({map:Textura_plano, side: THREE.DoubleSide});
+    //El plano (Territorio)
+    Territorio = new THREE.Mesh(Geometria_plano, Material_plano)
+    Escenario.add(Territorio);
 }
 
 function animacion() {

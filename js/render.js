@@ -118,6 +118,8 @@ function crear_plano(){
     Material_plano = new THREE.MeshBasicMaterial({map:Textura_plano, side: THREE.DoubleSide});
     //El plano (Territorio)
     Territorio = new THREE.Mesh(Geometria_plano, Material_plano)
+    Territorio.rotation.y = -0.5;
+    Territorio.rotation.x = Math.PI/2;
     Escenario.add(Territorio);
 }
 

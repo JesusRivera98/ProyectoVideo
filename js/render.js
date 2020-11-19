@@ -17,7 +17,7 @@ var cerca = 0.1;
 var lejos = 10000
 //La cámara
 var Camara = new THREE.PerspectiveCamera(angulo, aspecto, cerca, lejos);
-
+THREEx.WindowResize(Render, Camara)
 //La figura
 var Figura;
 

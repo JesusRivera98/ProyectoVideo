@@ -105,7 +105,7 @@ function crear_plano(){
     //Geometria del plano
     Geometria_plano = new THREE.PlaneGeometry(1000,1000,10,10);
     //Textura
-    Textura_plano = new THREE.ImageUtils.loadTexture("Texturas/cesped.jpg");
+    Textura_plano = new THREE.ImageUtils.loadTexture("texturas/cesped.jpg");
     Textura_plano.wrapS = Textura_plano.wrapT = THREE.RepeatWrapping;
     Textura_plano.repeat.set(10,10);
     //Textura_plano.crossOrigin = ""

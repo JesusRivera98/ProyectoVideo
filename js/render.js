@@ -11,7 +11,7 @@ var Render = new THREE.WebGLRenderer();
 //El escenario
 var Escenario = new THREE.Scene();
 
-var angulo = 90;
+var angulo = 45;
 var aspecto = ancho / alto;
 var cerca = 0.1;
 var lejos = 10000
@@ -37,6 +37,9 @@ var material_geometrias = new THREE.MeshBasicMaterial({ map: textura_geometrias,
 // textura la misma indicaci�n que maneja el plano
 var textura_plano = new THREE.ImageUtils.loadTexture('texturas/cesped.jpg');
 
+var elCubo
+var mallaextrusion
+
 /******************************** funciones **************************************/
 inicio();
 animacion();
@@ -56,10 +59,16 @@ function inicio() {
     Escenario.add(Camara)
 
     //Territorio
-    //crear_plano();
+    crear_plano();
 
     //Cargar nuevos modelos
     cargar_modelo();
+    //Cargar el cubo
+    crear_cubo();
+    //Cargar el cilindro
+    //crear_cilindro();
+    //Cargar la esfera
+    //crear_esfera();
 
     //Agregar el escenario y la cámara al render
     //Render.render(Escenario, Camara)
@@ -122,7 +131,7 @@ function cargar_modelo() {
     var material = new THREE.MeshBasicMaterial({ map: textura, side: THREE.DoubleSide, wireframe: false });
 
     //La malla
-    var mallaextrusion = new THREE.Mesh(extrude_geometria, material);
+    mallaextrusion = new THREE.Mesh(extrude_geometria, material);
 
     //agregando al escenario el punto o particula
     ParticulaMaterial = new THREE.ParticleBasicMaterial({ color: 0xFF0000 });
@@ -149,14 +158,48 @@ function crear_plano() {
     Material_plano = new THREE.MeshBasicMaterial({ map: Textura_plano, side: THREE.DoubleSide });
     //El plano (Territorio)
     Territorio = new THREE.Mesh(Geometria_plano, Material_plano)
-    Territorio.rotation.y = -0.5;
+    //Territorio.rotation.y = -0.5;
     Territorio.rotation.x = Math.PI / 2;
     Escenario.add(Territorio);
+}
+
+function crear_cubo() {
+    //Generar la geometria del cubo
+    geometriaCubo = new THREE.CubeGeometry(10, 10, 10);
+    //Material de la figura
+    var material = new THREE.MeshBasicMaterial({ map: textura_geometrias, side: THREE.DoubleSide, wireframe: false });
+
+    //Generar la malla con la geometria y el material
+    elCubo = new THREE.Mesh(geometriaCubo, material);
+    
+    //Agregar el cubo al escenario
+    Escenario.add(elCubo);
+}
+
+function crear_cilindro() {
+    geometriaCilindro = new THREE.CylinderGeometry(10,10,20,20,1, false);
+    var mallaCilindro = new THREE.Mesh(geometriaCilindro, material_geometrias);
+    Escenario.add(mallaCilindro)
+}
+
+function crear_esfera() {
+    geometriaEsfera = new THREE.SphereGeometry(10,10,10)
+    var mallaEsfera = new THREE.Mesh(geometriaEsfera, Material_plano);
+    Escenario.add(mallaEsfera);
 }
 
 function animacion() {
     requestAnimationFrame(animacion);
     render_modelo();
+    //Rotación
+    mallaextrusion.rotation.x = Math.PI/2
+    //Traslación
+    mallaextrusion.position.x = 20
+    mallaextrusion.position.y = 20
+    //Escalado
+    mallaextrusion.scale.x = 3
+    mallaextrusion.scale.y = 3
+    mallaextrusion.scale.z = 3
 }
 
 function render_modelo() {

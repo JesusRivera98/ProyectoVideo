@@ -26,6 +26,7 @@ var ElVector
 
 //Cotroles
 var controls
+var control2
 
 //La textura para el modelo
 var textura = new THREE.ImageUtils.loadTexture('texturas/muro.jpg');
@@ -37,8 +38,13 @@ var material_geometrias = new THREE.MeshBasicMaterial({ map: textura_geometrias,
 // textura la misma indicaci�n que maneja el plano
 var textura_plano = new THREE.ImageUtils.loadTexture('texturas/cesped.jpg');
 
+//Figuras
 var elCubo
 var mallaextrusion
+
+//
+teclado = new THREEx.KeyboardState();
+var clock = new THREE.Clock();
 
 /******************************** funciones **************************************/
 inicio();
@@ -73,6 +79,12 @@ function inicio() {
     //Agregar el escenario y la cámara al render
     //Render.render(Escenario, Camara)
     controls = new THREE.OrbitControls(Camara, Render.domElement);
+
+    control2 = new THREE.FirstPersonControls(Camara);
+    control2.lookSpeed = 0.1;
+    control2.movementSpped = 100;
+    control2.lookVertical = false;
+    control2.activeLook = true;
 }
 
 function cargar_modelo() {
@@ -200,11 +212,42 @@ function animacion() {
     mallaextrusion.scale.x = 3
     mallaextrusion.scale.y = 3
     mallaextrusion.scale.z = 3
+
+    //Funciones del teclado
+    if(teclado.pressed("up")){
+        elCubo.rotation.x += -.01
+    }
+    if(teclado.pressed("down")){
+        elCubo.rotation.x -= -.01
+    }
+    if(teclado.pressed("W")){
+        elCubo.position.z += -1
+    }
+    if(teclado.pressed("S")){
+        elCubo.position.z -= -1
+    }
+    if(teclado.pressed("m")){
+        elCubo.scale.x += .1
+        elCubo.scale.y += .1
+        elCubo.scale.z += .1
+    }
+    if(teclado.pressed("L")){
+        elCubo.scale.x -= .1
+        elCubo.scale.y -= .1
+        elCubo.scale.z -= .1
+    }
+
+    controls.target.set(elCubo.position.x,elCubo.position.y,elCubo.position.z);
 }
 
+
 function render_modelo() {
-    controls.update();
+    //controls.update();
     Figura.rotation.y += 0.01;
     //Agregar el escenario y la cámara al render
+
+    var delta = clock.getDelta();
+    control2.update(delta)
+
     Render.render(Escenario, Camara)
 }

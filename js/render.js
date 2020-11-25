@@ -42,9 +42,24 @@ var textura_plano = new THREE.ImageUtils.loadTexture('texturas/cesped.jpg');
 var elCubo
 var mallaextrusion
 
-//
+//First person
 teclado = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
+
+//Modelos 3D externos
+var Modelo3D = new THREE.JSONLoader();
+Modelo3D.load("layers260a.js",funcionAgregarModelo);
+
+Modelo3D_DAE = THREE.ColladaLoader();
+Modelo3D_DAE.load("rifle.dae", AgregarDae);
+
+function AgregarDae(infodae){
+    modeloDAE_Final = infodae.scene;
+    modeloDAE_Final.position.set(0,0,0);
+    //modeloDAE_Final.scale.x = modeloDAE_Final.scale.y = modeloDAE_Final.z = 0.5
+    modeloDAE_Final.rotation.y = Math.PI;
+    Escenario.add(modeloDAE_Final);
+}
 
 /******************************** funciones **************************************/
 inicio();
@@ -199,6 +214,18 @@ function crear_esfera() {
     var mallaEsfera = new THREE.Mesh(geometriaEsfera, Material_plano);
     Escenario.add(mallaEsfera);
 }
+
+function funcionAgregarModelo(geometry, materials){
+    imagen = new THREE.ImageUtils.loadTexture("mario.jpg");
+    material = new THREE.MeshBasicMaterial({map:imagen});
+    ModeloFinal = new THREE.Mesh(geometry, material);
+    Escenario.add(ModeloFinal);
+    ModeloFinal.scale.set(10,10,10);
+    ModeloFinal.position.set(10,13,10);
+    ModeloFinal.rotation.y = Math.PI;
+}
+
+
 
 function animacion() {
     requestAnimationFrame(animacion);

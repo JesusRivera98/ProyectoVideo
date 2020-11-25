@@ -6,7 +6,8 @@ var ancho = window.innerWidth; // Ancho de pantalla
 var alto = window.innerHeight; // Alto de pantalla
 
 //Preparamos el render
-var Render = new THREE.WebGLRenderer();
+var Render = new THREE.WebGLRenderer({ antialias:true,preserveDrawingBuffer:true});
+Render.shadowMapEnabled = true;
 
 //El escenario
 var Escenario = new THREE.Scene();
@@ -53,6 +54,8 @@ Modelo3D.load("layers260a.js",funcionAgregarModelo);
 Modelo3D_DAE = THREE.ColladaLoader();
 Modelo3D_DAE.load("rifle.dae", AgregarDae);
 
+
+
 function AgregarDae(infodae){
     modeloDAE_Final = infodae.scene;
     modeloDAE_Final.position.set(0,0,0);
@@ -62,11 +65,18 @@ function AgregarDae(infodae){
 }
 
 /******************************** funciones **************************************/
+//Agregar la luz
+Luz();
+
 inicio();
 animacion();
+
+
 /********************* inicio *******************************************/
 function inicio() {
 
+    //Activar las sombras
+   //Render.shadowMapEnabled = true;
     //Tamaño del render
     //Render.setSize(800, 600);
     Render.setSize(ancho, alto);
@@ -95,11 +105,11 @@ function inicio() {
     //Render.render(Escenario, Camara)
     controls = new THREE.OrbitControls(Camara, Render.domElement);
 
-    control2 = new THREE.FirstPersonControls(Camara);
-    control2.lookSpeed = 0.1;
-    control2.movementSpped = 100;
-    control2.lookVertical = false;
-    control2.activeLook = true;
+    //control2 = new THREE.FirstPersonControls(Camara);
+    //control2.lookSpeed = 0.1;
+    //control2.movementSpped = 100;
+    //control2.lookVertical = false;
+    //control2.activeLook = true;
 }
 
 function cargar_modelo() {
@@ -187,6 +197,11 @@ function crear_plano() {
     Territorio = new THREE.Mesh(Geometria_plano, Material_plano)
     //Territorio.rotation.y = -0.5;
     Territorio.rotation.x = Math.PI / 2;
+
+    //agregar que se le proyecten las sombras
+    Territorio.receiveShadow = true;
+
+
     Escenario.add(Territorio);
 }
 
@@ -201,6 +216,8 @@ function crear_cubo() {
     
     //Agregar el cubo al escenario
     Escenario.add(elCubo);
+    elCubo.position.set(0,5,30);
+    elCubo.receiveShadow = true;
 }
 
 function crear_cilindro() {
@@ -217,14 +234,44 @@ function crear_esfera() {
 
 function funcionAgregarModelo(geometry, materials){
     imagen = new THREE.ImageUtils.loadTexture("mario.jpg");
-    material = new THREE.MeshBasicMaterial({map:imagen});
+    material = new THREE.MeshLambertMaterial({map:imagen});
     ModeloFinal = new THREE.Mesh(geometry, material);
     Escenario.add(ModeloFinal);
     ModeloFinal.scale.set(10,10,10);
     ModeloFinal.position.set(10,13,10);
     ModeloFinal.rotation.y = Math.PI;
+    ModeloFinal.castShadow = true;
 }
 
+function Luz() {
+    var luz = new THREE.PointLight(0xffffff);
+    luz.position.set(-100, 200, 100);
+    Escenario.add(luz);
+
+    //Luz de ambiente
+    var LuzAmbiente = new THREE.AmbientLight(0x000000);
+    Escenario.add(LuzAmbiente);
+
+    //más luz
+    var sunlight = new THREE.DirectionalLight();
+    sunlight.position.set(500, 500, -500);
+    sunlight.intesity = 1.3;
+    
+    sunlight.castShadow = true;
+    sunlight.shadowCameraVisible = true;
+    
+    sunlight.shadowCameraNear = 250;
+    sunlight.shadowCameraFar = 20000;
+    
+    intensidad = 50;
+
+    sunlight.shadowCameraLeft = -intensidad;
+    sunlight.shadowCameraRight = intensidad;
+    sunlight.shadowCameraTop = intensidad;
+    sunlight.shadowCameraBottom = -intensidad;
+    Escenario.add(sunlight)
+
+}
 
 
 function animacion() {
@@ -269,12 +316,13 @@ function animacion() {
 
 
 function render_modelo() {
-    //controls.update();
+    controls.update();
     Figura.rotation.y += 0.01;
     //Agregar el escenario y la cámara al render
 
     var delta = clock.getDelta();
-    control2.update(delta)
+    //control2.update(delta)
 
+    Render.render(Escenario, Camara)
     Render.render(Escenario, Camara)
 }
